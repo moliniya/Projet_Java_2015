@@ -3,6 +3,7 @@ package fr.enac.aero.display;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,8 +102,8 @@ public class DisplayAirport extends JFrame  {
 		
 		vols= new CanvasAirportMove(this.airportT);
 		
-		PanDisplay panDisplay = new PanDisplay(airportDrawPaper,vols);
-		//PanDisplay panDisplay = new PanDisplay(airportDrawPaper);
+		//PanDisplay panDisplay = new PanDisplay(airportDrawPaper,vols);
+		PanDisplay panDisplay = new PanDisplay(airportDrawPaper);
 		
 		
 		
@@ -125,22 +126,23 @@ public class DisplayAirport extends JFrame  {
 	 
 	 
 		////////////////////
-	 /**
+	 
 		//le temps du timer est en millisecondes
 		 //on veut un delay de 5 secondes => 5000
-		 final Timer timer=new Timer(500,new ActionListener() {
-			 int i=0;
+		/* final Timer timer=new Timer(5000,new ActionListener() {
+			  int i=0;
 			@Override
 			 public void actionPerformed(ActionEvent e) {
 				 //for(int i=0;i<5;i++){
 			//airportDrawPaper.repaint();
+			
 				vols.paintFlights(i);
 				
 				//vols.repaint();
 				
 				
 				i+=5;
-					 System.out.println("coucou\n");
+					 System.out.println("coucou\n"+ i);
 				// }
 
 				}	
@@ -162,7 +164,7 @@ public class DisplayAirport extends JFrame  {
 		 }
 		 );
 		
-			 this.add(timerButton,BorderLayout.NORTH);**/
+			 this.add(timerButton,BorderLayout.NORTH);*/
 			 
 			 
 			 

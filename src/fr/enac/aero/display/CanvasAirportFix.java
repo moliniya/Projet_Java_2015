@@ -20,15 +20,15 @@ import fr.enac.aero.trafficPackage.AirportTraffic;
 
 
 
-public class CanvasAirportFix extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener {
-    private int panX = 0;
+public class CanvasAirportFix extends JPanel  {//implements MouseListener, MouseMotionListener, MouseWheelListener {
+   /* private int panX = 0;
     private int panY = 0;
     private double zoom = 1;
     private final int hauteurStd=800;
-	private final int largeurStd=1000;
+	private final int largeurStd=1000;*/
     private Airport apt;
     private AirportTraffic airportT;
-    private Etat etat = Etat.IDLE;
+   // private Etat etat = Etat.IDLE;
     
    // private Graphics g;
     
@@ -52,17 +52,17 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
 	 
 	//this.setBackground(Color.BLACK);
 	this.setPreferredSize(new Dimension(900,900));
-	//this.setSize(300,300);
-	this.setSize(this.largeurStd>width?width:this.largeurStd,this.hauteurStd>height?height:this.hauteurStd);
+	this.setSize(900,900);
+	//this.setSize(this.largeurStd>width?width:this.largeurStd,this.hauteurStd>height?height:this.hauteurStd);
 	this.setVisible(true);
 	//this.setBackground(Color.WHITE);
 	
 	this.setOpaque(true);
 	
-    addMouseListener (this);
+   /* addMouseListener (this);
     addMouseMotionListener (this);
     addMouseWheelListener (this);
-    
+    */
    // this.setOpaque(true);
     
     this.apt=apt;
@@ -88,8 +88,8 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
     @Override
     public void paintComponent(Graphics g) {
 
-    	g.clearRect(0, 0, this.hauteurStd, this.largeurStd);
-    	apt.drawAirport(g,panX,panY,zoom);
+    	g.clearRect(0, 0, PanDisplay.getHauteurStd(), PanDisplay.getLargeurStd());
+    	apt.drawAirport(g,PanDisplay.getPanX(),PanDisplay.getPanY(),PanDisplay.getZoom());
     	
     	//apt.drawAirport(this,0,0,1);
     	
@@ -98,7 +98,7 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
     	
     }
      
-    
+    /*
      @Override
     public void mouseClicked(MouseEvent e) {}
 
@@ -106,14 +106,14 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
     private int tmpY;
     @Override
     public void mousePressed(MouseEvent e) {
-        etat = Etat.CLICK;
+    	PanDisplay.setEtat( Etat.CLICK); 
         tmpX = e.getX();
         tmpY = e.getY();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-       etat = Etat.IDLE;
+    	PanDisplay.setEtat( Etat.IDLE);  
     }
 
     @Override
@@ -124,14 +124,14 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
 
     @Override
     public void mouseDragged(MouseEvent e) {
-       switch (etat){
+       switch (PanDisplay.getEtat()){
             case CLICK:
                 int varX = e.getX() - tmpX;
                 int varY =  e.getY() - tmpY;
                 tmpX = e.getX();
                 tmpY = e.getY();
-                panX += varX;
-                panY += varY;
+                PanDisplay.setPanX(varX + PanDisplay.getPanX() ) ;
+                PanDisplay.setPanY(varY + PanDisplay.getPanY() ) ;
                 repaint();
                 break;
             case IDLE:
@@ -144,19 +144,19 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
     	// Calucler les coordonnees du carre dans le monde reel avant le zoom :
-        xM1 =  ((e.getX()/zoom) - this.panX);
-        yM1 =  ((e.getY()/zoom) - this.panY);
+        xM1 =  ((e.getX()/PanDisplay.getZoom()) - PanDisplay.getPanX());
+        yM1 =  ((e.getY()/PanDisplay.getZoom()) - PanDisplay.getPanY());
         // On change le coef de zoom :
-       zoom -= e.getWheelRotation()*0.1;
-       if (zoom <= 0){
-           zoom = 0.1;
+        PanDisplay.setZoom(e.getWheelRotation()*0.1 -PanDisplay.getZoom() ) ;
+       if (PanDisplay.getZoom() <= 0){
+    	   PanDisplay.setZoom(0.1) ;
        }
        // Calculer les coordonnees reelles apres le zoom :
-        xM2 =  ((e.getX()/zoom) - this.panX);
-        yM2 =  ((e.getY()/zoom) - this.panY);
+        xM2 =  ((e.getX()/PanDisplay.getZoom()) - PanDisplay.getPanX());
+        yM2 =  ((e.getY()/PanDisplay.getZoom()) -PanDisplay.getPanY());
         // On adapte le pan en faisant la difference :
-        this.panX += xM2 - xM1;
-        this.panY += yM2 - yM1;
+        PanDisplay.setPanX( (int)(xM2 - xM1+PanDisplay.getPanX() )); 
+        PanDisplay.setPanY( (int)(yM2 - yM1 + PanDisplay.getPanY()));
        
        repaint();
     }
@@ -164,6 +164,6 @@ public class CanvasAirportFix extends JPanel implements MouseListener, MouseMoti
     @Override
     public void mouseMoved(MouseEvent e) {}
     
-
+*/
    
 }
