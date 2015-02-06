@@ -128,10 +128,10 @@ public class DisplayAirport extends JFrame  {
 					// Ajout Separateur  position 1/4 3/4
 		        	/// ajout doit se faire après l'ajout des pannneaux 
 	         		SplitIHM SplitDisplayAirport = new SplitIHM(panUser, panDisplay, heightScreen, widthScreen);	
-	         		this.getContentPane().add(SplitDisplayAirport, BorderLayout.WEST);
+	         		
 					//SplitDisplayAirport.setOneTouchExpandable(true);
 					//SplitDisplayAirport.setAutoscrolls(true);
-					this.add(SplitDisplayAirport, BorderLayout.WEST);
+					this.add(SplitDisplayAirport, BorderLayout.CENTER);
 		
 			
 					
