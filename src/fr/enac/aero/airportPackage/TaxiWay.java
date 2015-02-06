@@ -92,7 +92,7 @@ public class TaxiWay extends ObjectAirport {
 		
 		
 		@Override
-		public void drawObject(Graphics g, int panX, int panY, double zoom) {
+		public void drawObject(Graphics g, int panX, int panY, double zoom, int height, int width) {
 
 			
 		//	Graphics2D g = (Graphics2D)ge;
@@ -110,8 +110,8 @@ public class TaxiWay extends ObjectAirport {
                             
                             Point  pt1 = new Point(x1,y1);
                             Point  pt2 = new Point(x2,y2);
-                            super.changerPointRepere(pt1,g);
-                            super.changerPointRepere(pt2,g);
+                            super.changerPointRepere(pt1,height,width);
+                            super.changerPointRepere(pt2,height,width);
                         //    Stroke s = g.getStroke();
                             
                          //  g.setStroke(new BasicStroke((int)zoom));

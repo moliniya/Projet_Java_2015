@@ -4,17 +4,34 @@ package fr.enac.aero.display;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import fr.enac.aero.airportPackage.Airport;
+import fr.enac.aero.display.panelUser.PanUser;
+import fr.enac.aero.display.panelUser.SplitIHM;
 import fr.enac.aero.trafficPackage.AirportTraffic;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.awt.Component;
+
 
 /**
  * Classe  HIM qui affiche 
@@ -47,7 +64,9 @@ public class DisplayAirport extends JFrame  {
 	private Airport  airport;
 	private AirportTraffic airportT;
 	private CanvasAirportMove vols;
-	
+	private JScrollPane Scroll_Display;
+	private JScrollPane Scroll_User;
+	private PanUser panUser;
 	
 	/**
 	 * Constructeur principale 
@@ -70,114 +89,64 @@ public class DisplayAirport extends JFrame  {
 		//this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
 		
 		// panneau
-		PanUser panUser = new PanUser();
-		//PanDisplay panDisplay = new PanDisplay();
 		
-		 
-		
-		
-		
-	
-		
-
-	   
-
-	
-		
-		JMenuBar Barmenu = new JMenuBar();
-		this.setJMenuBar(Barmenu);
-		
-		
-
 		
 		airport = new Airport();
 		airportT = new AirportTraffic();
 	
 		
 		this.initData();
-		
+		 panUser = new PanUser(airportT);
 		airportDrawPaper = new CanvasAirportFix(this.airport,this.airportT);
 		
 		
 		
 		vols= new CanvasAirportMove(this.airportT);
 		
-		//PanDisplay panDisplay = new PanDisplay(airportDrawPaper,vols);
-		PanDisplay panDisplay = new PanDisplay(airportDrawPaper);
-		
-		
-		
-		// ajout des panneaux à  la fenetre avec  
-		this.add(panDisplay,BorderLayout.EAST);
-		//this.add(panUser,BorderLayout.WEST);
-		
-		
-		//this.initData();
+		PanDisplay panDisplay = new PanDisplay(airportDrawPaper,vols);
 		
 		 
-		 
-		//panDisplay.add(airportDrawPaper);
-		 
 		
 		
-	
 		
-	 
-	 
-	 
-		////////////////////
-	 
-		//le temps du timer est en millisecondes
-		 //on veut un delay de 5 secondes => 5000
-		/* final Timer timer=new Timer(5000,new ActionListener() {
-			  int i=0;
-			@Override
-			 public void actionPerformed(ActionEvent e) {
-				 //for(int i=0;i<5;i++){
-			//airportDrawPaper.repaint();
+	//DImensions de la fenetre
+		 Dimension screenDim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+			int heightScreen = (int)screenDim.getHeight();
+			int widthScreen  = (int)screenDim.getWidth();
 			
-				vols.paintFlights(i);
-				
-				//vols.repaint();
-				
-				
-				i+=5;
-					 System.out.println("coucou\n"+ i);
-				// }
+			
 
-				}	
-			}
-			);
-		 
+		// Ajout du Menu 
+					MenuBarIHM Barmenu = new MenuBarIHM(panUser);
+					this.setJMenuBar(Barmenu);
+
+		         	 // Ajout des panneaux avec positionnement
+		         	this.add(panDisplay,BorderLayout.EAST);
+		         	this.add(panUser,BorderLayout.CENTER);
+	
+					
+					// Ajout Separateur  position 1/4 3/4
+		        	/// ajout doit se faire après l'ajout des pannneaux 
+	         		SplitIHM SplitDisplayAirport = new SplitIHM(panUser, panDisplay, heightScreen, widthScreen);	
+	         		this.getContentPane().add(SplitDisplayAirport, BorderLayout.WEST);
+					//SplitDisplayAirport.setOneTouchExpandable(true);
+					//SplitDisplayAirport.setAutoscrolls(true);
+					this.add(SplitDisplayAirport, BorderLayout.WEST);
 		
-		 	 final JButton timerButton=new JButton("start");
-		 timerButton.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
-				 if (timer.isRunning())
-					 timer.stop();
-				 else
-					 timer.start();
-				 timerButton.setText((timer.isRunning())?"stop":"start");
-			 }
-			 
-		 }
-		 );
-		
-			 this.add(timerButton,BorderLayout.NORTH);*/
-			 
-			 
-			 
-			 
-			 
-		
-		this.setSize(1200, 900);
-		this.pack();
-		this.setVisible(true);
+			
+					
+			         	TimerDisplay timerDisplay = new TimerDisplay(panUser, vols);
 		
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+			 
+			 
+			
+			 
+			 // Activation de la fenetre 
+			this.setSize(widthScreen,heightScreen);
+			//this.pack();
+			this.setVisible(true);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	
@@ -198,8 +167,8 @@ public void initData(){
 	 
 	
 }
-	
-	
+
+
 
 	
 	

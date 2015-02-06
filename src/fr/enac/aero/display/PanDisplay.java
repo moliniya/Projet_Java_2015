@@ -3,6 +3,7 @@ package fr.enac.aero.display;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,8 +14,14 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import fr.enac.aero.trafficPackage.AirportTraffic;
+
 
 public class PanDisplay extends JComponent implements MouseListener, MouseMotionListener, MouseWheelListener  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private CanvasAirportFix airportDrawPaper;
 	private CanvasAirportMove vols;
 
@@ -25,41 +32,6 @@ public class PanDisplay extends JComponent implements MouseListener, MouseMotion
 	static	private final int largeurStd=1000;
 	static	private Etat etat = Etat.IDLE;
 
-	
-	
-	public PanDisplay(CanvasAirportFix airportDrawPaper){//,CanvasAirportMove vols
-		//gestionnaire  fenetrage Display
-		super();
-		this.airportDrawPaper = airportDrawPaper;
-	//	this.vols = vols;
-		this.setPreferredSize(new Dimension(900,900));
-		
-		
-		//airportDrawPaper.setBackground(new Color(0,0,0,0));
-		
-		//this.add(vols, -1);
-		this.add(airportDrawPaper,-1);
-	
-		airportDrawPaper.setOpaque(true);
-		//vols.setOpaque(false);
-		//this.add(airportDrawPaper,1);
-		//this.add(airportDrawPaper, 2);
-		
-		//this.setComponentZOrder(canvas2, 1);
-		
-				//this.setSize( new Dimension (900,850));
-			//	this.setAutoscrolls(true);
-			//	this.setBackground(Color.WHITE);
-		
-		addMouseListener (this);
-	    addMouseMotionListener (this);
-	    addMouseWheelListener (this);
-	    
-				
-	}
-	
-	
-	
 	static public int getPanX() {
 			return panX;
 		}
@@ -110,13 +82,45 @@ public class PanDisplay extends JComponent implements MouseListener, MouseMotion
 		}
 
 
+	public PanDisplay(CanvasAirportFix airportDrawPaper,CanvasAirportMove vols){//,CanvasAirportMove vols
+		//gestionnaire  fenetrage Display
+		super();
+		this.airportDrawPaper = airportDrawPaper;
+		this.vols = vols;
+		
+	
+		this.setPreferredSize(new Dimension(900,900));
+		airportDrawPaper.setHeightPanel(this.getPreferredSize().height);
+		airportDrawPaper.setWidthPanel(this.getPreferredSize().width);
+		vols.setHeightPanel(this.getPreferredSize().height);
+		vols.setWidthPanel(this.getPreferredSize().width);
+		vols.setSize(this.getPreferredSize().height, this.getPreferredSize().width);
+		airportDrawPaper.setSize(this.getPreferredSize().height, this.getPreferredSize().width);
+		
+		this.add(vols, -1);
+		this.add(airportDrawPaper,-1);
+	
+		airportDrawPaper.setOpaque(true);
+		vols.setOpaque(false);
+		
+		
+		addMouseListener (this);
+	    addMouseMotionListener (this);
+	    addMouseWheelListener (this);
+	    
+				
+	}
 	
 	
+	 
+	 
 	  @Override
 	    public void mouseClicked(MouseEvent e) {}
 
 	    private int tmpX;
 	    private int tmpY;
+	    
+	    
 	    @Override
 	    public void mousePressed(MouseEvent e) {
 	        etat = Etat.CLICK;
@@ -156,22 +160,25 @@ public class PanDisplay extends JComponent implements MouseListener, MouseMotion
 	    private double yM1, yM2;
 	    @Override
 	    public void mouseWheelMoved(MouseWheelEvent e) {
+	    	double realZoom=0;
 	    	// Calucler les coordonnees du carre dans le monde reel avant le zoom :
 	        xM1 =  ((e.getX()/zoom) - this.panX);
 	        yM1 =  ((e.getY()/zoom) - this.panY);
 	        // On change le coef de zoom :
-	       zoom -= e.getWheelRotation()*0.1;
-	       if (zoom <= 0){
-	           zoom = 0.1;
-	       }
+	        realZoom = zoom -e.getWheelRotation()*0.1;
+	        if (realZoom >0.1 && realZoom <12){
+	       zoom = realZoom;
 	       // Calculer les coordonnees reelles apres le zoom :
 	        xM2 =  ((e.getX()/zoom) - this.panX);
 	        yM2 =  ((e.getY()/zoom) - this.panY);
 	        // On adapte le pan en faisant la difference :
 	        this.panX += xM2 - xM1;
 	        this.panY += yM2 - yM1;
-	       
+	      
+	     
+	
 	       repaint();
+	        }
 	    }
 
 	    @Override

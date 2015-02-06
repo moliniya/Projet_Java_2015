@@ -65,7 +65,7 @@ public class Flight {
 	
 	private AirportTraffic apt;
 	
-	private int rayon = 3;
+	private int rayon = 1;
 	
 	/* ---- ---- */
 	
@@ -265,46 +265,6 @@ public class Flight {
 	
 	/* ---- ---- */
 
-/**
- * Methode pour tracer un vol
- * @param canvas
- * @param n
- */
-public void DrawFlight(JPanel g,  int panX, int panY, double zoom) {
-	//Graphics g = canvas.getGraphics();
-	//g.setColor(Color.BLUE);
-	
-			for(HashMap.Entry<Integer, Point> entry : mapPath.entrySet()) {
-				Point pt =entry.getValue();			
-					//cpt++;
-					
-					//System.out.println("draw point : " + cpt +"\n");
-					
-					
-					
-					//premier parametre : x
-					//deuxieme parametre : y
-					//troisieme et quatrieme parametre : le rayon
-					
-				//g.translate(2500, 2000);
-							
-					
-					apt.changerPointRepere(pt,g);
-					int xe =  (int) ((pt.getX()+panX)*zoom);
-			        int ye = (int) ((pt.getY()+panY)*zoom);
-			        int we = (int) (rayon*zoom);
-			        
-					//g.drawOval(xe, ye, we, we);
-			        //g.fillOval(xe, ye, we, we);						
-			        JButton jb = new JButton("coucou2");
-					jb.setText("mon bouton2");
-					jb.setVisible(true);
-					jb.setLocation(xe,ye);
-					g.add(jb);
-				}
-			
-				
-			}
 
 
 		}

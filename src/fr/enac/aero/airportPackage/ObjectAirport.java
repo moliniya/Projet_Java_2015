@@ -8,9 +8,11 @@ import java.awt.Point;
 import javax.swing.JComponent;
 
 import fr.enac.aero.display.CanvasAirportFix;
+import fr.enac.aero.trafficPackage.AirportTraffic;
 
 public abstract class ObjectAirport {
 	private Airport apt;
+	
 	
 	public ObjectAirport(final Airport apt){
 		this.apt = apt;
@@ -26,7 +28,7 @@ public abstract class ObjectAirport {
 	 * Methode qui permet de representer graphiqement un objet sur la plateforme graphique de l'aeroport
 	 * @param canvas le canvas sur lequel l'objet graphique doit etre trace
 	 */
-	public abstract void drawObject(Graphics g, int panX, int panY, double zoom);
+	public abstract void drawObject(Graphics g, int panX, int panY, double zoom, int height, int width);
 	
 	/** 
 	 * Redefinition de la methode String pour un objet aeroport
@@ -34,20 +36,22 @@ public abstract class ObjectAirport {
 	 */
 	public abstract String toString();
 	
-	 protected void changerPointRepere(Point p , Graphics g){
-		 
-		
+
+	 protected void changerPointRepere(Point p , int height, int width){
+			
 	        if (apt.getxMax()-apt.getxMin() != 0  && apt.getyMax()-apt.getyMin() !=0){
 	            int T=(apt.getyMin());
 	            int B=apt.getyMax();
-	           //// int H=(g.getHeight())-(g.getHeight()/20);
-	            int H=400;
+	           int H=(height)-(height/20);
+	           
+	         
+	           //int H=400;
 	            //int H=(c.getHeight());
 	            int Y=p.y;
 	            int L=(apt.getxMin());
 	            int R=apt.getxMax();
-	          ////  int W=(g.getWidth())-(g.getWidth()/20);
-	            int W=400;
+	            int W=(width)-(width/20);
+	           // int W=400;
 	           // int W=(c.getWidth());
 	            int X=p.x;
 	            p.x=((W*(X-L))/(R-L));

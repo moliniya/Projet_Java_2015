@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import fr.enac.aero.display.CanvasAirportFix;
 
@@ -141,7 +142,7 @@ public class AirportPoint extends ObjectAirport{
 	 * @param canvas canvas sur lequel il faut afficher l'objet
 	 */
 	@Override
-	public void drawObject(Graphics g, int panX, int panY, double zoom) {
+	public void drawObject(Graphics g, int panX, int panY, double zoom, int height, int width) {
 		//cpt++;
 		
 		//System.out.println("draw point : " + cpt +"\n");
@@ -155,13 +156,13 @@ public class AirportPoint extends ObjectAirport{
 	//g.translate(2500, 2000);
 		g.setColor(Color.RED);
 		Point pt = new Point(coord.x,coord.y);
-		super.changerPointRepere(pt,g);
+		super.changerPointRepere(pt,height,width);
 		int xe =  (int) ((pt.getX()+panX)*zoom);
         int ye = (int) ((pt.getY()+panY)*zoom);
         int we = (int) (rayon*zoom);
         
 		//g.drawOval(xe, ye, we, we);
-		g.fillOval(xe, ye, we, we);
+		g.fillOval(xe-we/2, ye-we/2, we, we);
 		
 		
 		

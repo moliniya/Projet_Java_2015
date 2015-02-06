@@ -3,12 +3,14 @@ package fr.enac.aero.trafficPackage;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -16,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import fr.enac.aero.display.CanvasAirportMove;
+import fr.enac.aero.display.PanDisplay;
 
 /**
  * Cette classe contient les informations relatives a l'ensemble du trafic sur l'aeroport.
@@ -35,6 +38,7 @@ public class AirportTraffic {
 	 */
 	public AirportTraffic(){
 		this.mapFlight = new HashMap<String,Flight> ();
+		this.mapFlightButton = new HashMap<String,FlightIcon> ();
 	}
 	
 	/* ---- ---- */
@@ -45,6 +49,9 @@ public class AirportTraffic {
 	//HashMap stockant l'ensemble des avions 
 	private HashMap<String,Flight> mapFlight;
 	
+	
+	
+	private  HashMap<String,FlightIcon> mapFlightButton;
 	
 	private int xMax,xMin,yMax,yMin;
 	/* ---- ---- */
@@ -99,6 +106,18 @@ public class AirportTraffic {
 		
 	}
 	
+	
+	
+	public void setMapButtons(HashMap<String,FlightIcon> mapButtons){
+		this.mapFlightButton=mapButtons;
+	}
+	
+	public HashMap<String,FlightIcon> getMapButtons(){
+		return this.mapFlightButton;
+	}
+	
+	
+	
 /**
  * Methode qui charge le fichier dont le nom est passe en parametre et cree les objets vols decrits dans le fichier
  * avant de les stocker dans la liste de vol : mapFlight
@@ -141,7 +160,7 @@ public class AirportTraffic {
 														
 							//c'est un nouveau vol donc on cree un objet vol
 							Flight monVol = new Flight(this,flightType ,callSign,category,startPoint,qfuFlight,startTime,slotTime);
-						
+							FlightIcon monIcone = new FlightIcon(monVol);
 							
 							//Recuperation de tous les points
 							int timeToAdd = 0;
@@ -158,7 +177,7 @@ public class AirportTraffic {
 							}
 							//System.out.println("affichage du vol : \n ");
 							//System.out.println(monVol.toString());
-							this.addFlight(monVol);
+							this.addFlight(monVol, monIcone);
 							ps.close();
 							
 						}
@@ -192,20 +211,16 @@ public class AirportTraffic {
 	
 		
 	
-	 public void changerPointRepere(Point p , JPanel g){
+	 public void changerPointRepere(Point p , int height,int width){
 	        
 	        if (xMax-xMin != 0  && yMax-yMin !=0){
 	            int T=(yMin);
 	            int B=yMax;
-	           int H=(g.getHeight())-(g.getHeight()/20);
-	          //  int H=400;
-	            //int H=(c.getHeight());
+	           int H=(height)-(height/20);
 	            int Y=p.y;
 	            int L=(xMin);
 	            int R=xMax;
-	            int W=(g.getWidth())-(g.getWidth()/20);
-	           // int W=400;
-	           // int W=(c.getWidth());
+	           int W=(width)-(width/20);
 	            int X=p.x;
 	            p.x=((W*(X-L))/(R-L));
 	            p.y=(-(H*(T-Y))/(T-B))+H;    
@@ -221,52 +236,46 @@ public class AirportTraffic {
 	 * Methode qui permet d'ajouter un avion a la liste des avions circulant sur la plateforme
 	 * @param p l'avion a ajouter
 	 */
-	public void addFlight(Flight p){
-		this.mapFlight.put(p.getCallSign(),p);
-	}
+	 public void addFlight(Flight p,FlightIcon ic){
+			this.mapFlight.put(p.getCallSign(),p);
+			this.mapFlightButton.put(ic.getFlight().getCallSign(), ic);
+		}
 	/* ---- ---- */
 	
-	/**
-	 * Methode pour tracer tous les point de trajectoire des vols associes au temps n passe en parametre
-	 * @param canvas
-	 * @param n
-	 */
-public void DrawAllFlight(JPanel g,int n,  int panX, int panY, double zoom) {
+	 
+	 public ArrayList<FlightIcon> getFlightButton(JPanel g,int t, int panX, int panY, double zoom, int height, int width) {
+		 
+		 ArrayList<FlightIcon> listeFlightButton = new ArrayList<FlightIcon>();
+		 
+		 for (HashMap.Entry<String,Flight> entry : mapFlight.entrySet()) {
+				Flight monVol = entry.getValue();
+				if (monVol.getPoint(t) != null ){
+					
+					FlightIcon monIcon = this.mapFlightButton.get(monVol.getCallSign());
+					 updateIconCoord(monIcon ,t, height,  width,  panX,  panY,  zoom);
+				
+							listeFlightButton.add(monIcon);
+	
+				}
+		 }
 		
-		
-		for (HashMap.Entry<String,Flight> entry : mapFlight.entrySet()) {
-			Flight monVol = entry.getValue();
-			if (monVol.getPoint(n) != null ){
-				//System.out.println("non nul \n");
-				//Graphics g = canvas.getGraphics();
-				
-				//g.setColor(Color.BLUE);
-				Point pt = new Point(monVol.getPoint(n).x,monVol.getPoint(n).y);
-				changerPointRepere(pt,g);
-				int xe =  (int) ((pt.getX()+panX)*zoom);
-		        int ye = (int) ((pt.getY()+panY)*zoom);
-		        int we = (int) (50*zoom);
-		        
-		        
-		        JButton jb = new JButton("coucou");
-				jb.setText("mon bouton");
-				jb.setVisible(true);
-				jb.setLocation(xe,ye);
-				g.add(jb);
-		        
-				
-				//g.fillOval(xe, ye, we, we);
-				/*JButton jb = new JButton("coucou");
-				jb.setText("mon bouton");
-				jb.setVisible(true);
-				jb.setLocation(xe,ye);*/
-				//g.add(jb);
-				
-				
-			}
-		}
-
-			}
+		return listeFlightButton; 
+	 }
+	 	
+	 	
+public void updateIconCoord(FlightIcon ic,int time, int height, int width, int panX, int panY, double zoom){
+	String callSign = ic.getFlight().getCallSign();
+	Flight f= this.mapFlight.get(callSign);
+	Point pt = new Point(f.getPoint(time).x,f.getPoint(time).y);
+	changerPointRepere(pt,height,width);
+	int xe =  (int) ((pt.getX()+panX)*zoom);
+    int ye = (int) ((pt.getY()+panY)*zoom);
+    int we = (int) (20*zoom);
+			ic.setxDisplay(xe);
+			ic.setyDisplay(ye);
+			ic.setwDisplay(we);
+			System.out.println("we: "+we);
+}
 
 }
 	

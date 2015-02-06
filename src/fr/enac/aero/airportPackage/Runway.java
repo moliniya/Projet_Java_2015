@@ -89,7 +89,7 @@ public class Runway extends ObjectAirport {
 		
 
 		@Override
-		public void drawObject(Graphics g, int panX, int panY, double zoom) {
+		public void drawObject(Graphics g, int panX, int panY, double zoom, int height, int width) {
 	//Graphics2D g = (Graphics2D)ge;
             
             g.setColor(Color.BLACK);
@@ -103,8 +103,8 @@ public class Runway extends ObjectAirport {
                         	 Point  pt1 = new Point(ap1.getCoord().x,ap1.getCoord().y);
                         	 Point  pt2 = new Point(ap2.getCoord().x,ap2.getCoord().y);
                         	 
-                        	 super.changerPointRepere(pt1,g);
-                             super.changerPointRepere(pt2,g);
+                        	 super.changerPointRepere(pt1,height,width);
+                             super.changerPointRepere(pt2,height,width);
                          //    Stroke s = g.getStroke();
                           
                            //  g.setStroke(new BasicStroke(4*(int)zoom));

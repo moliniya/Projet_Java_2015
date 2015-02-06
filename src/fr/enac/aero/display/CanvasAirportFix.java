@@ -28,6 +28,8 @@ public class CanvasAirportFix extends JPanel  {//implements MouseListener, Mouse
 	private final int largeurStd=1000;*/
     private Airport apt;
     private AirportTraffic airportT;
+    
+    private int heightPanel,widthPanel;
    // private Etat etat = Etat.IDLE;
     
    // private Graphics g;
@@ -51,8 +53,8 @@ public class CanvasAirportFix extends JPanel  {//implements MouseListener, Mouse
 	 
 	 
 	//this.setBackground(Color.BLACK);
-	this.setPreferredSize(new Dimension(900,900));
-	this.setSize(900,900);
+	//this.setPreferredSize(new Dimension(900,900));
+	//this.setSize(900,900);
 	//this.setSize(this.largeurStd>width?width:this.largeurStd,this.hauteurStd>height?height:this.hauteurStd);
 	this.setVisible(true);
 	//this.setBackground(Color.WHITE);
@@ -70,100 +72,36 @@ public class CanvasAirportFix extends JPanel  {//implements MouseListener, Mouse
     }
 
 
-   /* @Override
-    public void paint(Graphics g_) {
+    
+    
+    
+    
+    
+    public AirportTraffic getAirportTraffic(){
+    	return this.airportT;
+    }
+    
 
-    	apt.drawAirport(this,panX,panY,zoom);
-
-    	//apt.drawAirport(this,0,0,1);
-    	
-    	//airportT.DrawAllFlight(this, 1440,0,0,1);
-    	//airportT.DrawAllFlight(this, 5725,0,0,1);
-    	
-    }*/
-    
-    
-    
+	public int getHeightPanel() {
+		return heightPanel;
+	}
+	public void setHeightPanel(int heightPanel) {
+		this.heightPanel = heightPanel;
+	}
+	public int getWidthPanel() {
+		return widthPanel;
+	}
+	public void setWidthPanel(int widthPanel) {
+		this.widthPanel = widthPanel;
+	}
     
     @Override
     public void paintComponent(Graphics g) {
 
-    	g.clearRect(0, 0, PanDisplay.getHauteurStd(), PanDisplay.getLargeurStd());
-    	apt.drawAirport(g,PanDisplay.getPanX(),PanDisplay.getPanY(),PanDisplay.getZoom());
     	
-    	//apt.drawAirport(this,0,0,1);
-    	
-    	//airportT.DrawAllFlight(this, 1440,0,0,1);
-    	//airportT.DrawAllFlight(this, 5725,0,0,1);
+    	apt.drawAirport(g,PanDisplay.getPanX(),PanDisplay.getPanY(),PanDisplay.getZoom(), this.heightPanel, this.widthPanel);
+
     	
     }
-     
-    /*
-     @Override
-    public void mouseClicked(MouseEvent e) {}
-
-    private int tmpX;
-    private int tmpY;
-    @Override
-    public void mousePressed(MouseEvent e) {
-    	PanDisplay.setEtat( Etat.CLICK); 
-        tmpX = e.getX();
-        tmpY = e.getY();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    	PanDisplay.setEtat( Etat.IDLE);  
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-
-    @Override
-    public void mouseExited(MouseEvent e) {}
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-       switch (PanDisplay.getEtat()){
-            case CLICK:
-                int varX = e.getX() - tmpX;
-                int varY =  e.getY() - tmpY;
-                tmpX = e.getX();
-                tmpY = e.getY();
-                PanDisplay.setPanX(varX + PanDisplay.getPanX() ) ;
-                PanDisplay.setPanY(varY + PanDisplay.getPanY() ) ;
-                repaint();
-                break;
-            case IDLE:
-                break;            
-       }
-    }
-    
-    private double xM1,xM2;
-    private double yM1, yM2;
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-    	// Calucler les coordonnees du carre dans le monde reel avant le zoom :
-        xM1 =  ((e.getX()/PanDisplay.getZoom()) - PanDisplay.getPanX());
-        yM1 =  ((e.getY()/PanDisplay.getZoom()) - PanDisplay.getPanY());
-        // On change le coef de zoom :
-        PanDisplay.setZoom(e.getWheelRotation()*0.1 -PanDisplay.getZoom() ) ;
-       if (PanDisplay.getZoom() <= 0){
-    	   PanDisplay.setZoom(0.1) ;
-       }
-       // Calculer les coordonnees reelles apres le zoom :
-        xM2 =  ((e.getX()/PanDisplay.getZoom()) - PanDisplay.getPanX());
-        yM2 =  ((e.getY()/PanDisplay.getZoom()) -PanDisplay.getPanY());
-        // On adapte le pan en faisant la difference :
-        PanDisplay.setPanX( (int)(xM2 - xM1+PanDisplay.getPanX() )); 
-        PanDisplay.setPanY( (int)(yM2 - yM1 + PanDisplay.getPanY()));
-       
-       repaint();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {}
-    
-*/
-   
+ 
 }

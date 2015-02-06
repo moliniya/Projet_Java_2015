@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import fr.enac.aero.display.CanvasAirportFix;
 
@@ -150,13 +151,13 @@ public class Airport {
 	 * Methode qui permet de d'afficher sur l'aeroport graphique l'ensemble des objets graphiques qui le constituent
 	 * @param canvas canvas sur lequel doivent etre affiches les objets graphique
 	 */
-	public void drawAirport(Graphics g, int panX, int panY, double zoom){
+	public void drawAirport(Graphics g, int panX, int panY, double zoom, int height, int width){
 		
 		for (HashMap.Entry<String,ObjectAirport> entry : mapObjAeroport.entrySet()) {
 			ObjectAirport object = entry.getValue();
 			//String k = entry.getKey();
 			
-			object.drawObject(g,panX,panY,zoom);
+			object.drawObject(g,panX,panY,zoom,height, width);
 			
 		}
 		
